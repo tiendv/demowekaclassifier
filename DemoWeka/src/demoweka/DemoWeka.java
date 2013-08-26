@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package demoweka;
+import java.util.List;
  import weka.classifiers.Classifier;
  import weka.core.Instances;
  import weka.classifiers.Evaluation;
@@ -18,10 +19,11 @@ public class DemoWeka {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        
+        List<Object> listTrain=null; // nhớ truyền vào
+        List<Object> listTest=null; // nhớ truyền vào
         // TODO code application logic here
-        Instances train = BuildVector.buildVector(null, 100); // Dữ liệu train
-        Instances test =  BuildVector.buildVector(null, 50); // Dữ liệu Test
+        Instances train = BuildVector.buildVector(listTrain, 100); // Dữ liệu train
+        Instances test =  BuildVector.buildVector(listTest, 50); // Dữ liệu Test
         // train classifier Gọi thuật toán phân lớp 
         
         Classifier cls = new J48(); //Gọi thuật toán phân lớp 

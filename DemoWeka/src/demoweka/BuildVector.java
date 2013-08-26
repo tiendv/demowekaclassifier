@@ -30,13 +30,13 @@ public class BuildVector {
      * @param numberofVector số các vector.
      * @return 
      */
-    public static Instances buildVectorWithFeatures (int numberOfFeature, int numberofVector)
+    public static Instances buildVectorWithWekaFormat (int numberOfFeatureInObject, int numberofOurVectorForTesOrTrain)
     {
         Instances instances;
         // Value feature 
-        FastVector vector = new FastVector(numberOfFeature+1);
+        FastVector vector = new FastVector(numberOfFeatureInObject+1);
         
-        // Thêm tên cac dac trung để khi import giá trị từng đặc trưng vào sẽ thêm theo tên này
+        // Mô tả lại các đặc trưng có trong object của mình thành instace của weka
         // Gia su co n dac trung thi lam tuong tu features1,features2,features3,features4....
         Attribute features1 = new  Attribute("Dactrung1");
         vector.addElement(features1);
@@ -52,8 +52,8 @@ public class BuildVector {
         vector.addElement(classAttribute);
         
         // Hoan thanh viec buld cai cau truc
-        instances = new Instances("Name", vector,numberofVector);
-        instances.setClassIndex(numberOfFeature);
+        instances = new Instances("Name", vector,numberofOurVectorForTesOrTrain);
+        instances.setClassIndex(numberOfFeatureInObject);
         return instances;
     }
      // Xây dựng data
@@ -63,15 +63,17 @@ public class BuildVector {
       * @param numberofVector : Số vector đưa vào train hoặc test
       * @return 
       */
-     public static Instances buildVector(List<Feature> feature, int numberofVector)
+     public static Instances buildVector(List<Object> listObject, int numberofObject)
      {    
-        // Xây dựng cấu trúc của vector gồm bao nhiêu chiều có tên gì thuộc tính tên gi
-        Instances instancesData = buildVectorWithFeatures(numberofVector, feature.size());
+        int numberFeatureInOurObject =3; // Số các đặc trưng trong object của mình
         
-        for(int i = 0; i < feature.size(); i++)
+        // Xây dựng cấu trúc của vector gồm bao nhiêu chiều có tên gì thuộc tính tên gi
+        Instances instancesData = buildVectorWithWekaFormat(numberFeatureInOurObject, numberofObject);
+        
+        for(int i = 0; i < numberofObject; i++)
         {  
             // Insert dữ liệu cho từng vector 
-            Instance simple = insertFeatureValue(instancesData, feature.get(i), feature.size()+1);
+            Instance simple = insertFeatureValue(instancesData, listObject.get(i), numberFeatureInOurObject+1);
             instancesData.add(simple);
         } 
         return instancesData;
@@ -84,13 +86,13 @@ public class BuildVector {
       * @param dimension : Số chiều của vector (lưu ý là số các đặc trưng và 1 giá trị để gán nhãn nữa)
       * @return 
       */
-     public static Instance insertFeatureValue (Instances instancesData, Feature feature, int dimension )
+     public static Instance insertFeatureValue (Instances instancesData, Object objectInput, int dimension )
      {   
          Instance simple =  new SparseInstance(dimension);
          
          // Add các giá trị của các đặc trưng vào ( các giá trị theo các chiều trong vector) 
          // Bao gồm cả thuộc tính gán nhãn của vector.
-         simple.setValue((Attribute) instancesData.attribute("Dactrung1"),feature.Value);
+         simple.setValue((Attribute) instancesData.attribute("Dactrung1"),objectInput.feature1.Value);
          
          // 
          return simple;
